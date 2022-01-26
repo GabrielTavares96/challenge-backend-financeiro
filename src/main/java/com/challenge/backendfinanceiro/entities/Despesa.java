@@ -1,6 +1,7 @@
 package com.challenge.backendfinanceiro.entities;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "despesas")
@@ -11,12 +12,12 @@ public class Despesa {
     private Long id;
     private String descricao;
     private String valor;
-    private String data;
+    private Date data;
 
     public Despesa() {
     }
 
-    public Despesa(Long id, String descricao, String valor, String data) {
+    public Despesa(Long id, String descricao, String valor, Date data) {
         this.id = id;
         this.descricao = descricao;
         this.valor = valor;
@@ -47,11 +48,11 @@ public class Despesa {
         this.valor = valor;
     }
 
-    public String getData() {
+    public Date getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(Date data) {
         this.data = data;
     }
 }

@@ -1,8 +1,8 @@
 package com.challenge.backendfinanceiro.services;
 
-import com.challenge.backendfinanceiro.dto.ReceitaDTO;
-import com.challenge.backendfinanceiro.entities.Receita;
-import com.challenge.backendfinanceiro.repositories.ReceitaRepository;
+import com.challenge.backendfinanceiro.dto.DespesasDTO;
+import com.challenge.backendfinanceiro.entities.Despesa;
+import com.challenge.backendfinanceiro.repositories.DespesaRepository;
 import com.challenge.backendfinanceiro.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,40 +15,37 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ReceitaService {
+public class DespesaService {
 
     @Autowired
-    private ReceitaRepository repository;
+    private DespesaRepository repository;
 
     @Transactional(readOnly = true)
-    public ReceitaDTO findById(Long id) {
-        Optional<Receita> receita = repository.findById(id);
-        Receita entity = receita.orElseThrow(() -> new ResourceNotFoundException(id));
-        return new ReceitaDTO(entity);
+    public List<DespesasDTO> findAll(){
+        List<Despesa> despesas = repository.findAll();
+        return despesas.stream().map(x -> new DespesasDTO(x)).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<ReceitaDTO> findByDescricao(String descricao) {
-        List<Receita> receitas = repository.findReceitaByDescricao(descricao);
-
-        return receitas.stream().map(x -> new ReceitaDTO(x)).collect(Collectors.toList());
+    public DespesasDTO findById(Long id) {
+        Optional<Despesa> despesa = repository.findById(id);
+        Despesa entity = despesa.orElseThrow(() -> new ResourceNotFoundException(id));
+        return new DespesasDTO(entity);
     }
-
 
     @Transactional(readOnly = true)
-    public List<ReceitaDTO> findAll() {
-        List<Receita> receitas = repository.findAll();
-        return receitas.stream().map(x -> new ReceitaDTO(x)).collect(Collectors.toList());
+    public List<DespesasDTO> findByDescricao(String descricao) {
+        List<Despesa> despesas = repository.findDespesaByDescricao(descricao);
+
+        return despesas.stream().map(x -> new DespesasDTO(x)).collect(Collectors.toList());
     }
-
-
 
     @Transactional
-    public ReceitaDTO insert(ReceitaDTO dto) throws Exception {
-        List<ReceitaDTO> list = findByDescricao(dto.getDescricao());
+    public DespesasDTO insert (DespesasDTO dto) throws Exception{
+        List<DespesasDTO> list = findByDescricao(dto.getDescricao());
 
         if(list.isEmpty()){
-            Receita entity = new Receita();
+            Despesa entity = new Despesa();
 
             entity.setId(dto.getId());
             entity.setDescricao(dto.getDescricao());
@@ -57,23 +54,23 @@ public class ReceitaService {
 
 
             entity = repository.save(entity);
-            return new ReceitaDTO(entity);
+            return new DespesasDTO(entity);
         } else{
             throw new Exception();
         }
     }
 
     @Transactional
-    public ReceitaDTO update(Long id, ReceitaDTO dto) {
+    public DespesasDTO update(Long id, DespesasDTO dto) {
         try {
-            Receita entity = repository.getById(id);
+            Despesa entity = repository.getById(id);
             entity.setDescricao(dto.getDescricao());
             entity.setValor(dto.getValor());
             entity.setData(dto.getData());
 
             entity = repository.save(entity);
 
-            return new ReceitaDTO(entity);
+            return new DespesasDTO(entity);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Id not found " + id);
         }
