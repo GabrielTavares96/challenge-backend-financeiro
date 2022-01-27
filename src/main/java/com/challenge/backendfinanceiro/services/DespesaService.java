@@ -1,10 +1,12 @@
 package com.challenge.backendfinanceiro.services;
 
 import com.challenge.backendfinanceiro.dto.DespesasDTO;
+import com.challenge.backendfinanceiro.dto.ReceitaDTO;
 import com.challenge.backendfinanceiro.entities.Despesa;
 import com.challenge.backendfinanceiro.entities.enums.Categoria;
 import com.challenge.backendfinanceiro.repositories.DespesaRepository;
 import com.challenge.backendfinanceiro.services.exceptions.ResourceNotFoundException;
+import com.challenge.backendfinanceiro.util.DataUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -42,8 +44,16 @@ public class DespesaService {
     }
 
     @Transactional
+    public List<DespesasDTO> findByDate (Integer ano, Integer mes){
+
+        List<Despesa> despesas = repository.findDespesaByDate(ano,mes);
+
+        return despesas.stream().map(x -> new DespesasDTO(x)).collect(Collectors.toList());
+    }
+
+    @Transactional
     public DespesasDTO insert(DespesasDTO dto) throws Exception {
-        List<DespesasDTO> list = findByDescricao(dto.getDescricao());
+        List<Despesa> list = repository.findDespesaByDateAndDescricao(DataUtil.getYear(dto.getData()), DataUtil.getMonth(dto.getData()),dto.getDescricao());
 
         if (list.isEmpty()) {
             Despesa entity = new Despesa();

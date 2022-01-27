@@ -4,6 +4,7 @@ package com.challenge.backendfinanceiro.resources;
 import com.challenge.backendfinanceiro.dto.DespesasDTO;
 import com.challenge.backendfinanceiro.services.DespesaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -40,6 +41,11 @@ public class DespesaResource {
         return ResponseEntity.ok(despesas);
     }
 
+    @GetMapping(value = "/{ano}/{mes}")
+        public ResponseEntity<List<DespesasDTO>> findByData(@PathVariable Integer ano, @PathVariable Integer mes){
+        List<DespesasDTO> despesas = service.findByDate(ano, mes);
+        return ResponseEntity.ok(despesas);
+    }
     @PostMapping
     public ResponseEntity<DespesasDTO> insert(@RequestBody @Valid DespesasDTO dto) throws Exception {
         dto = service.insert(dto);
