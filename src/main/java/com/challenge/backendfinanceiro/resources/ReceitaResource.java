@@ -24,6 +24,12 @@ public class ReceitaResource {
         return ResponseEntity.ok(dto);
     }
 
+    @GetMapping(value = "/{ano}/{mes}")
+    public ResponseEntity<List<ReceitaDTO>> findByData(@PathVariable Integer ano, @PathVariable Integer mes) {
+        List<ReceitaDTO> receitas = service.findByDate(ano, mes);
+        return ResponseEntity.ok(receitas);
+    }
+
     @GetMapping(value = "/search")
     public ResponseEntity<List<ReceitaDTO>> findByDescricao(
             @RequestParam(value = "descricao", required = true) String descricao
@@ -32,6 +38,8 @@ public class ReceitaResource {
         List<ReceitaDTO> receitas = service.findByDescricao(descricao);
         return ResponseEntity.ok(receitas);
     }
+
+
 
     @GetMapping
     public ResponseEntity<List<ReceitaDTO>> findAll() {

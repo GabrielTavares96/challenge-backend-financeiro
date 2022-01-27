@@ -1,7 +1,10 @@
 package com.challenge.backendfinanceiro.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -15,12 +18,14 @@ public class Receita {
 
     private String descricao;
     private String valor;
-    private Date data;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate data;
 
     public Receita() {
     }
 
-    public Receita(Long id, String descricao, String valor, Date data) {
+    public Receita(Long id, String descricao, String valor, LocalDate data) {
         this.id = id;
         this.descricao = descricao;
         this.valor = valor;
@@ -51,11 +56,11 @@ public class Receita {
         this.valor = valor;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 }

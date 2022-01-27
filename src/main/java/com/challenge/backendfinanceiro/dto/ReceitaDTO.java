@@ -1,8 +1,10 @@
 package com.challenge.backendfinanceiro.dto;
 
 import com.challenge.backendfinanceiro.entities.Receita;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class ReceitaDTO {
@@ -15,7 +17,8 @@ public class ReceitaDTO {
     @NotBlank(message = "Campo obrigatório")
     private String valor;
 
-    private Date data;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate data;
 
     public ReceitaDTO() {
     }
@@ -51,11 +54,11 @@ public class ReceitaDTO {
         this.valor = valor;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 }

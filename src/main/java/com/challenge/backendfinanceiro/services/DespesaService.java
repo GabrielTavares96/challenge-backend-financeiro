@@ -2,6 +2,7 @@ package com.challenge.backendfinanceiro.services;
 
 import com.challenge.backendfinanceiro.dto.DespesasDTO;
 import com.challenge.backendfinanceiro.entities.Despesa;
+import com.challenge.backendfinanceiro.entities.enums.Categoria;
 import com.challenge.backendfinanceiro.repositories.DespesaRepository;
 import com.challenge.backendfinanceiro.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class DespesaService {
     private DespesaRepository repository;
 
     @Transactional(readOnly = true)
-    public List<DespesasDTO> findAll(){
+    public List<DespesasDTO> findAll() {
         List<Despesa> despesas = repository.findAll();
         return despesas.stream().map(x -> new DespesasDTO(x)).collect(Collectors.toList());
     }
@@ -41,10 +42,10 @@ public class DespesaService {
     }
 
     @Transactional
-    public DespesasDTO insert (DespesasDTO dto) throws Exception{
+    public DespesasDTO insert(DespesasDTO dto) throws Exception {
         List<DespesasDTO> list = findByDescricao(dto.getDescricao());
 
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             Despesa entity = new Despesa();
 
             entity.setId(dto.getId());
@@ -52,10 +53,15 @@ public class DespesaService {
             entity.setValor(dto.getValor());
             entity.setData(dto.getData());
 
+            if (dto.getCategoria() == null) {
+                entity.setCategoria(Categoria.OUTRAS);
+            } else {
+                entity.setCategoria(dto.getCategoria());
+            }
 
             entity = repository.save(entity);
             return new DespesasDTO(entity);
-        } else{
+        } else {
             throw new Exception();
         }
     }
@@ -67,6 +73,9 @@ public class DespesaService {
             entity.setDescricao(dto.getDescricao());
             entity.setValor(dto.getValor());
             entity.setData(dto.getData());
+
+
+            entity.setCategoria(dto.getCategoria());
 
             entity = repository.save(entity);
 

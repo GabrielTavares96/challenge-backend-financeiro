@@ -4,12 +4,17 @@ import com.challenge.backendfinanceiro.dto.ReceitaDTO;
 import com.challenge.backendfinanceiro.entities.Receita;
 import com.challenge.backendfinanceiro.repositories.ReceitaRepository;
 import com.challenge.backendfinanceiro.services.exceptions.ResourceNotFoundException;
+import com.challenge.backendfinanceiro.util.DataUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,6 +39,14 @@ public class ReceitaService {
         return receitas.stream().map(x -> new ReceitaDTO(x)).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<ReceitaDTO> findByDate(Integer ano, Integer mes) {
+
+        List<Receita> receitas = repository.findReceitaByDate(ano,mes);
+
+        return receitas.stream().map(x -> new ReceitaDTO(x)).collect(Collectors.toList());
+    }
+
 
     @Transactional(readOnly = true)
     public List<ReceitaDTO> findAll() {
@@ -42,12 +55,11 @@ public class ReceitaService {
     }
 
 
-
     @Transactional
     public ReceitaDTO insert(ReceitaDTO dto) throws Exception {
-        List<ReceitaDTO> list = findByDescricao(dto.getDescricao());
+        List<Receita> list = repository.findReceitaByDateAndDescricao(DataUtil.getYear(dto.getData()), DataUtil.getMonth(dto.getData()),dto.getDescricao());
 
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             Receita entity = new Receita();
 
             entity.setId(dto.getId());
@@ -58,7 +70,7 @@ public class ReceitaService {
 
             entity = repository.save(entity);
             return new ReceitaDTO(entity);
-        } else{
+        } else {
             throw new Exception();
         }
     }
@@ -86,5 +98,6 @@ public class ReceitaService {
             throw new ResourceNotFoundException(id);
         }
     }
+
 
 }

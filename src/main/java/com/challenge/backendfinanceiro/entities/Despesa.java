@@ -1,6 +1,9 @@
 package com.challenge.backendfinanceiro.entities;
 
+import com.challenge.backendfinanceiro.entities.enums.Categoria;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -12,16 +15,20 @@ public class Despesa {
     private Long id;
     private String descricao;
     private String valor;
-    private Date data;
+    private LocalDate data;
+
+    @Enumerated(EnumType.STRING)
+    private Categoria categoria;
 
     public Despesa() {
     }
 
-    public Despesa(Long id, String descricao, String valor, Date data) {
+    public Despesa(Long id, String descricao, String valor, LocalDate data, Categoria categoria) {
         this.id = id;
         this.descricao = descricao;
         this.valor = valor;
         this.data = data;
+        this.categoria = categoria;
     }
 
     public Long getId() {
@@ -48,11 +55,19 @@ public class Despesa {
         this.valor = valor;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }
