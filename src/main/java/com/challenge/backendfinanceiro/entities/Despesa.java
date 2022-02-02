@@ -14,7 +14,7 @@ public class Despesa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descricao;
-    private String valor;
+    private Double valor;
     private LocalDate data;
 
     @Enumerated(EnumType.STRING)
@@ -23,7 +23,7 @@ public class Despesa {
     public Despesa() {
     }
 
-    public Despesa(Long id, String descricao, String valor, LocalDate data, Categoria categoria) {
+    public Despesa(Long id, String descricao, Double valor, LocalDate data, Categoria categoria) {
         this.id = id;
         this.descricao = descricao;
         this.valor = valor;
@@ -47,11 +47,11 @@ public class Despesa {
         this.descricao = descricao;
     }
 
-    public String getValor() {
+    public Double getValor() {
         return valor;
     }
 
-    public void setValor(String valor) {
+    public void setValor(Double valor) {
         this.valor = valor;
     }
 

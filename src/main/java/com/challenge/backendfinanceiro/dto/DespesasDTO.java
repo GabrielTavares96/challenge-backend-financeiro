@@ -4,6 +4,7 @@ import com.challenge.backendfinanceiro.entities.Despesa;
 import com.challenge.backendfinanceiro.entities.enums.Categoria;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -14,8 +15,8 @@ public class DespesasDTO {
     @NotBlank(message = "Campo obrigatório")
     private String descricao;
 
-    @NotBlank(message = "Campo obrigatório")
-    private String valor;
+    @NotNull(message = "Campo obrigatório")
+    private Double valor;
 
     private LocalDate data;
 
@@ -50,11 +51,11 @@ public class DespesasDTO {
         this.descricao = descricao;
     }
 
-    public String getValor() {
+    public Double getValor() {
         return valor;
     }
 
-    public void setValor(String valor) {
+    public void setValor(Double valor) {
         this.valor = valor;
     }
 

@@ -1,7 +1,10 @@
 package com.challenge.backendfinanceiro.services;
 
+import com.challenge.backendfinanceiro.dto.CategoriaGastoDTO;
 import com.challenge.backendfinanceiro.dto.ReceitaDTO;
+import com.challenge.backendfinanceiro.dto.ResumoMesDTO;
 import com.challenge.backendfinanceiro.entities.Receita;
+import com.challenge.backendfinanceiro.repositories.DespesaRepository;
 import com.challenge.backendfinanceiro.repositories.ReceitaRepository;
 import com.challenge.backendfinanceiro.services.exceptions.ResourceNotFoundException;
 import com.challenge.backendfinanceiro.util.DataUtil;
@@ -25,6 +28,9 @@ public class ReceitaService {
     @Autowired
     private ReceitaRepository repository;
 
+    @Autowired
+    private DespesaRepository despesaRepository;
+
     @Transactional(readOnly = true)
     public ReceitaDTO findById(Long id) {
         Optional<Receita> receita = repository.findById(id);
@@ -47,6 +53,23 @@ public class ReceitaService {
         return receitas.stream().map(x -> new ReceitaDTO(x)).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public ResumoMesDTO findByResumo(Integer ano, Integer mes) {
+        ResumoMesDTO dto = new ResumoMesDTO();
+        List<CategoriaGastoDTO> categoriaGastoDTO = despesaRepository.findValorDespesaByCategoria(ano, mes);
+
+
+        Double totalReceita = repository.findSumValorReceitaByDate(ano, mes);
+        Double totalDespesa = despesaRepository.findSumValorDespesaByDate(ano, mes);
+        Double saldoFinal = totalReceita - totalDespesa;
+
+        dto.setTotalReceita(totalReceita);
+        dto.setTotalDespesa(totalDespesa);
+        dto.setSaldoFinal(saldoFinal);
+        dto.setCategoriaGastoDTO(categoriaGastoDTO);
+
+        return dto;
+    }
 
     @Transactional(readOnly = true)
     public List<ReceitaDTO> findAll() {

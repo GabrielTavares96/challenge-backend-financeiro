@@ -17,7 +17,7 @@ public class Receita {
     private Long id;
 
     private String descricao;
-    private String valor;
+    private Double valor;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate data;
@@ -25,7 +25,7 @@ public class Receita {
     public Receita() {
     }
 
-    public Receita(Long id, String descricao, String valor, LocalDate data) {
+    public Receita(Long id, String descricao, Double valor, LocalDate data) {
         this.id = id;
         this.descricao = descricao;
         this.valor = valor;
@@ -48,11 +48,11 @@ public class Receita {
         this.descricao = descricao;
     }
 
-    public String getValor() {
+    public Double getValor() {
         return valor;
     }
 
-    public void setValor(String valor) {
+    public void setValor(Double valor) {
         this.valor = valor;
     }
 

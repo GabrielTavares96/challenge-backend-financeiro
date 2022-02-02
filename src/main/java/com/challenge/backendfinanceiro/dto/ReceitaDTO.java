@@ -4,6 +4,7 @@ import com.challenge.backendfinanceiro.entities.Receita;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -14,8 +15,8 @@ public class ReceitaDTO {
     @NotBlank(message = "Campo obrigatório")
     private String descricao;
 
-    @NotBlank(message = "Campo obrigatório")
-    private String valor;
+    @NotNull(message = "Campo obrigatório")
+    private Double valor;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate data;
@@ -46,11 +47,11 @@ public class ReceitaDTO {
         this.descricao = descricao;
     }
 
-    public String getValor() {
+    public Double getValor() {
         return valor;
     }
 
-    public void setValor(String valor) {
+    public void setValor(Double valor) {
         this.valor = valor;
     }
 

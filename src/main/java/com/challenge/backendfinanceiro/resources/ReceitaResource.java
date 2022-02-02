@@ -1,6 +1,7 @@
 package com.challenge.backendfinanceiro.resources;
 
 import com.challenge.backendfinanceiro.dto.ReceitaDTO;
+import com.challenge.backendfinanceiro.dto.ResumoMesDTO;
 import com.challenge.backendfinanceiro.services.ReceitaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -68,5 +69,12 @@ public class ReceitaResource {
     public ResponseEntity<ReceitaDTO> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping(value = "/resumo/{ano}/{mes}")
+    public ResponseEntity<ResumoMesDTO> findByResumo(@PathVariable Integer ano, @PathVariable Integer mes) {
+        ResumoMesDTO dto = service.findByResumo(ano, mes);
+        return ResponseEntity.ok(dto);
     }
 }
